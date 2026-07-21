@@ -1,0 +1,27 @@
+name: Build EXE File
+
+on: [push, workflow_dispatch]
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
+
+    - name: Setup Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+
+    - name: Install Libraries & Build EXE
+      run: |
+        pip install PyQt6 selenium pyinstaller
+        pyinstaller --noconsole --onefile app.py
+
+    - name: Download Link Prepare
+      uses: actions/upload-artifact@v4
+      with:
+        name: TelegramSchedulerApp
+        path: dist/app.exe
